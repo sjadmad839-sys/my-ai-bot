@@ -10,24 +10,21 @@ logging.basicConfig(
     level=logging.INFO
 )
 
-# --- الإعدادات (التوكنات) ---
+# --- الإعدادات (التوكنات جاهزة هسة) ---
 TELEGRAM_TOKEN = "8774572251:AAGoWnDhOGkfkKSbVk_N_9XA5-oGW1vcXB4"
-# حط مفتاح Groq مالتك هنا بين علامات الاقتباس
-GROQ_API_KEY = "حط_مفتاح_جروك_هنا" 
+GROQ_API_KEY = "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"
 
 # تهيئة عميل Groq
 client = Groq(api_key=GROQ_API_KEY)
 
-# دالة الترحيب عند كتابة /start
+# دالة الترحيب
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("هلا بيك سجاد! أنا بوت الذكاء الاصطناعي، اسألني أي شي.")
+    await update.message.reply_text("هلا بيك سجاد! أنا بوت الذكاء الاصطناعي الخاص بك، اسألني أي شي.")
 
-# دالة معالجة الرسائل والرد عليها باستخدام الذكاء الاصطناعي
+# دالة معالجة الرسائل
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_message = update.message.text
-    
     try:
-        # إرسال الرسالة إلى نموذج Llama 3 في Groq
         chat_completion = client.chat.completions.create(
             messages=[{"role": "user", "content": user_message}],
             model="llama3-8b-8192",
@@ -38,10 +35,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         logging.error(f"Error: {e}")
         await update.message.reply_text(f"صار عندي خطأ فني بسيط، جرب مرة ثانية.")
 
-# بناء التطبيق وتشغيله مباشرة
+# بناء التطبيق
 app = ApplicationBuilder().token(TELEGRAM_TOKEN).build()
 
-# إضافة الأوامر والمستمعين
+# إضافة الأوامر
 app.add_handler(CommandHandler('start', start))
 app.add_handler(MessageHandler(filters.TEXT & (~filters.COMMAND), handle_message))
 
